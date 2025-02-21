@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:meal_app/data/dummy_dart.dart';
 import 'package:meal_app/models/category.dart';
-import 'package:meal_app/screens/meal_screen.dart';
+import 'package:meal_app/screens/meals.dart';
 import 'package:meal_app/widgets/catergory_item.dart';
 
 class CategoriesScreen extends StatelessWidget {
@@ -16,7 +16,7 @@ class CategoriesScreen extends StatelessWidget {
 
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (ctx) => MealScreen(
+        builder: (ctx) => Meals(
           title: category.title,
           meals: filteredMeal,
         ),
@@ -46,7 +46,7 @@ class CategoriesScreen extends StatelessWidget {
               onSelectCategory: () {
                 _selectCategory(context, categoryitem);
               },
-            )
+            ),
         ],
       ),
     );

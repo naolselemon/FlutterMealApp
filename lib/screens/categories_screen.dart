@@ -1,10 +1,26 @@
 import 'package:flutter/material.dart';
 
-import 'package:meal_app/data/data.dart';
+import 'package:meal_app/data/dummy_dart.dart';
+import 'package:meal_app/models/category.dart';
+import 'package:meal_app/screens/meal_screen.dart';
 import 'package:meal_app/widgets/catergory_item.dart';
 
 class CategoriesScreen extends StatelessWidget {
   const CategoriesScreen({super.key});
+
+  void _selectCategory(BuildContext context, Category category) {
+    // TODO: Navigate to the corresponding screen when a category is selected
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (ctx) => MealScreen(
+          title: category.title,
+          meals: dummyMeals
+              .where((meal) => meal.categories.contains(category.id))
+              .toList(),
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +39,12 @@ class CategoriesScreen extends StatelessWidget {
         children: [
           //availableCategories.map(category=> CategoryItem(category: category)) -- this is alternative for for loop
           for (final categoryitem in availableCategories)
-            CatergoryItem(category: categoryitem)
+            CatergoryItem(
+              category: categoryitem,
+              onSelectCategory: () {
+                _selectCategory(context, categoryitem);
+              },
+            )
         ],
       ),
     );

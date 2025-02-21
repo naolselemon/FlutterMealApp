@@ -10,13 +10,15 @@ class CategoriesScreen extends StatelessWidget {
 
   void _selectCategory(BuildContext context, Category category) {
     // TODO: Navigate to the corresponding screen when a category is selected
+    final filteredMeal = dummyMeals
+        .where((meal) => meal.categories.contains(category.id))
+        .toList();
+
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (ctx) => MealScreen(
           title: category.title,
-          meals: dummyMeals
-              .where((meal) => meal.categories.contains(category.id))
-              .toList(),
+          meals: filteredMeal,
         ),
       ),
     );

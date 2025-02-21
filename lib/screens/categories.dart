@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 
 import 'package:meal_app/data/dummy_dart.dart';
 import 'package:meal_app/models/category.dart';
+import 'package:meal_app/models/meal.dart';
 import 'package:meal_app/screens/meals.dart';
 import 'package:meal_app/widgets/catergory_item.dart';
 
 class CategoriesScreen extends StatelessWidget {
-  const CategoriesScreen({super.key});
+  const CategoriesScreen({super.key, required this.onSelectMeal});
+
+  final void Function(Meal meal) onSelectMeal;
 
   void _selectCategory(BuildContext context, Category category) {
     // TODO: Navigate to the corresponding screen when a category is selected
@@ -19,6 +22,7 @@ class CategoriesScreen extends StatelessWidget {
         builder: (ctx) => Meals(
           title: category.title,
           meals: filteredMeal,
+          onSelectMeal: onSelectMeal,
         ),
       ),
     );
@@ -26,29 +30,24 @@ class CategoriesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Pick Category"),
+    return GridView(
+      padding: const EdgeInsets.all(24),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        mainAxisSpacing: 20,
+        crossAxisSpacing: 20,
+        childAspectRatio: 3 / 2,
       ),
-      body: GridView(
-        padding: const EdgeInsets.all(24),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          mainAxisSpacing: 20,
-          crossAxisSpacing: 20,
-          childAspectRatio: 3 / 2,
-        ),
-        children: [
-          //availableCategories.map(category=> CategoryItem(category: category)) -- this is alternative for for loop
-          for (final categoryitem in availableCategories)
-            CatergoryItem(
-              category: categoryitem,
-              onSelectCategory: () {
-                _selectCategory(context, categoryitem);
-              },
-            ),
-        ],
-      ),
+      children: [
+        //availableCategories.map(category=> CategoryItem(category: category)) -- this is alternative for for loop
+        for (final categoryitem in availableCategories)
+          CatergoryItem(
+            category: categoryitem,
+            onSelectCategory: () {
+              _selectCategory(context, categoryitem);
+            },
+          ),
+      ],
     );
   }
 }

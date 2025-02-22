@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+
 import 'package:meal_app/models/meal.dart';
 import 'package:meal_app/screens/categories.dart';
+import 'package:meal_app/screens/filters.dart';
 import 'package:meal_app/screens/meals.dart';
+import 'package:meal_app/widgets/main_drawer.dart';
 
 class TabScreen extends StatefulWidget {
   const TabScreen({super.key});
@@ -17,6 +20,14 @@ class _TabScreenState extends State<TabScreen> {
     setState(() {
       selectedIndex = index;
     });
+  }
+
+  void _setDrawerScreen(String identifier) {
+    Navigator.of(context).pop();
+    if (identifier == "Filters") {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (ctx) => const FiltersScreen()));
+    }
   }
 
   void _showMessage(String message) {
@@ -60,6 +71,9 @@ class _TabScreenState extends State<TabScreen> {
     }
 
     return Scaffold(
+      drawer: MainDrawer(
+        onDrawerItemSelect: _setDrawerScreen,
+      ),
       appBar: AppBar(
         title: Text(activePageTitle),
       ),

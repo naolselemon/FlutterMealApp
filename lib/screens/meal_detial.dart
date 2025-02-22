@@ -1,0 +1,28 @@
+import 'package:flutter/material.dart';
+import 'package:meal_app/models/meal.dart';
+import 'package:meal_app/widgets/meal_item_detail.dart';
+
+class MealDetial extends StatelessWidget {
+  const MealDetial({super.key, required this.meal});
+  final Meal meal;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(meal.title),
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            MealItemDetail(
+              meal: meal,
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}

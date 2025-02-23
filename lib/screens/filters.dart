@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 
+import 'package:meal_app/widgets/filter_items.dart';
+
 class FiltersScreen extends StatefulWidget {
-  const FiltersScreen({super.key});
+  const FiltersScreen({super.key, required this.setFilterState});
+
+  final Map<Filter, bool> setFilterState;
 
   @override
   State<FiltersScreen> createState() {
@@ -9,44 +13,86 @@ class FiltersScreen extends StatefulWidget {
   }
 }
 
+enum Filter {
+  glutenFree,
+  lactoseFree,
+  vegetarian,
+  vegan,
+}
+
 class _Filters extends State<FiltersScreen> {
-  var _glutenFreeSet = false;
+  var glutenFree = false;
+  var lactoseFree = false;
+  var vegetarian = false;
+  var vegan = false;
+
+  Map<Filter, bool> _getFilters() {
+    return {
+      Filter.glutenFree: glutenFree,
+      Filter.lactoseFree: lactoseFree,
+      Filter.vegetarian: vegetarian,
+      Filter.vegan: vegan,
+    };
+  }
+
+  bool _onWillPop() {
+    Navigator.of(context).pop(_getFilters());
+    return false;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    glutenFree = widget.setFilterState[Filter.glutenFree]!;
+    lactoseFree = widget.setFilterState[Filter.lactoseFree]!;
+    vegetarian = widget.setFilterState[Filter.vegetarian]!;
+    vegan = widget.setFilterState[Filter.vegan]!;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Your Filters"),
       ),
-      body: Column(
-        children: [
-          SwitchListTile(
-            tileColor:
-                Theme.of(context).colorScheme.primaryContainer.withOpacity(0.8),
-            value: _glutenFreeSet,
-            onChanged: (isChecked) {
-              setState(() {
-                _glutenFreeSet = isChecked;
-              });
-            },
-            title: Text(
-              "Gluten-free",
-              style: Theme.of(context)
-                  .textTheme
-                  .titleLarge!
-                  .copyWith(color: Theme.of(context).colorScheme.onSurface),
-            ),
-            subtitle: Text(
-              "Includes gluten free only.",
-              style: Theme.of(context)
-                  .textTheme
-                  .labelSmall!
-                  .copyWith(color: Theme.of(context).colorScheme.onSurface),
-            ),
-            activeColor: Theme.of(context).colorScheme.tertiary,
-            contentPadding: const EdgeInsets.all(20),
-          )
-        ],
-      ),
+      body: PopScope(
+          canPop: false,
+          onPopInvokedWithResult: (didPop, result) {
+            if (didPop) return;
+            _onWillPop();
+          },
+          child: Column(
+            children: [
+              FilterItems(
+                  title: "Gluten-free",
+                  subTitle: "Includes gluten free only.",
+                  initialState: glutenFree,
+                  onChanged: (newState) => setState(() {
+                        glutenFree = newState;
+                      })),
+              FilterItems(
+                  title: "Lactose-free",
+                  subTitle: "Includes lactose free only.",
+                  initialState: lactoseFree,
+                  onChanged: (newState) => setState(() {
+                        lactoseFree = newState;
+                      })),
+              FilterItems(
+                  title: "Vegeterian",
+                  subTitle: "Includes vegeterian only.",
+                  initialState: vegetarian,
+                  onChanged: (newState) => setState(() {
+                        vegetarian = newState;
+                      })),
+              FilterItems(
+                  title: "Vegan",
+                  subTitle: "Includes vegan only.",
+                  initialState: vegan,
+                  onChanged: (newState) => setState(() {
+                        vegan = newState;
+                      })),
+            ],
+          )),
     );
   }
 }

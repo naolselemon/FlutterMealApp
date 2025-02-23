@@ -29,11 +29,13 @@ class Meals extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget content = Center(
+      widthFactor: 50,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            "Oh..no there is no data here",
+            "There is no data here!",
+            textAlign: TextAlign.center,
             style: Theme.of(context)
                 .textTheme
                 .headlineLarge!
@@ -44,6 +46,7 @@ class Meals extends StatelessWidget {
           ),
           Text(
             "please try other category",
+            textAlign: TextAlign.center,
             style: Theme.of(context)
                 .textTheme
                 .bodyLarge!

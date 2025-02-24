@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:meal_app/data/dummy_dart.dart';
 
 import 'package:meal_app/models/meal.dart';
@@ -14,14 +15,14 @@ const kInitialFilters = {
   Filter.vegan: false,
 };
 
-class TabScreen extends StatefulWidget {
+class TabScreen extends ConsumerStatefulWidget {
   const TabScreen({super.key});
 
   @override
-  State<TabScreen> createState() => _TabScreenState();
+  ConsumerState<TabScreen> createState() => _TabScreenState();
 }
 
-class _TabScreenState extends State<TabScreen> {
+class _TabScreenState extends ConsumerState<TabScreen> {
   Map<Filter, bool> _selectedFilters = kInitialFilters;
 
   int selectedIndex = 0;
@@ -75,7 +76,7 @@ class _TabScreenState extends State<TabScreen> {
   @override
   Widget build(BuildContext context) {
     final availableMeals = dummyMeals.where((meal) {
-      // how this magic works
+      // how this magic works:
       // false -  make the meal do not added to the list so initially selectedFilters set to false
       // there is no way for if block to execute which means where() returns TRUE so there is no data that drop out.
       // but if one of filter set to true then if block executes which means false returned( the meal drop out).

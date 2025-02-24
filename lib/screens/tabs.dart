@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:meal_app/data/dummy_dart.dart';
 
 import 'package:meal_app/models/meal.dart';
+import 'package:meal_app/provider/meals_provider.dart';
 import 'package:meal_app/screens/categories.dart';
 import 'package:meal_app/screens/filters.dart';
 import 'package:meal_app/screens/meals.dart';
@@ -27,6 +28,7 @@ class _TabScreenState extends ConsumerState<TabScreen> {
 
   int selectedIndex = 0;
   final List<Meal> favoritesMeal = [];
+
   void _selectPage(int index) {
     setState(() {
       selectedIndex = index;
@@ -75,7 +77,8 @@ class _TabScreenState extends ConsumerState<TabScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final availableMeals = dummyMeals.where((meal) {
+    final meals = ref.watch(mealsProvider);
+    final availableMeals = meals.where((meal) {
       // how this magic works:
       // false -  make the meal do not added to the list so initially selectedFilters set to false
       // there is no way for if block to execute which means where() returns TRUE so there is no data that drop out.
@@ -94,6 +97,7 @@ class _TabScreenState extends ConsumerState<TabScreen> {
       }
       return true;
     }).toList();
+
     Widget activePage = CategoriesScreen(
       onSelectMeal: _toggleMealFavoritesStatus,
       availableMeals: availableMeals,

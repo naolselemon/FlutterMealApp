@@ -20,7 +20,7 @@ class MealDetial extends ConsumerWidget {
           IconButton(
             onPressed: () {
               final wasAdded = ref
-                  .watch(favoriteMealsProvider.notifier)
+                  .read(favoriteMealsProvider.notifier)
                   .toggleFavoriteMealsStatus(meal);
               ScaffoldMessenger.of(context).clearSnackBars();
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(

@@ -1,98 +1,58 @@
 import 'package:flutter/material.dart';
+import "package:flutter_riverpod/flutter_riverpod.dart";
 
 import 'package:meal_app/widgets/filter_items.dart';
+import "package:meal_app/provider/filters_provider.dart";
 
-class FiltersScreen extends StatefulWidget {
-  const FiltersScreen({super.key, required this.setFilterState});
-
-  final Map<Filter, bool> setFilterState;
-
+class FiltersScreen extends ConsumerWidget {
+  const FiltersScreen({super.key});
   @override
-  State<FiltersScreen> createState() {
-    return _Filters();
-  }
-}
-
-enum Filter {
-  glutenFree,
-  lactoseFree,
-  vegetarian,
-  vegan,
-}
-
-class _Filters extends State<FiltersScreen> {
-  var glutenFree = false;
-  var lactoseFree = false;
-  var vegetarian = false;
-  var vegan = false;
-
-  Map<Filter, bool> _getFilters() {
-    return {
-      Filter.glutenFree: glutenFree,
-      Filter.lactoseFree: lactoseFree,
-      Filter.vegetarian: vegetarian,
-      Filter.vegan: vegan,
-    };
-  }
-
-  bool _onWillPop() {
-    Navigator.of(context).pop(_getFilters());
-    return false;
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    glutenFree = widget.setFilterState[Filter.glutenFree]!;
-    lactoseFree = widget.setFilterState[Filter.lactoseFree]!;
-    vegetarian = widget.setFilterState[Filter.vegetarian]!;
-    vegan = widget.setFilterState[Filter.vegan]!;
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final filterStatus = ref.watch(filtersProvider);
     return Scaffold(
       appBar: AppBar(
         title: const Text("Your Filters"),
       ),
-      body: PopScope(
-          canPop: false,
-          onPopInvokedWithResult: (didPop, result) {
-            if (didPop) return;
-            _onWillPop();
-          },
-          child: Column(
-            children: [
-              FilterItems(
-                  title: "Gluten-free",
-                  subTitle: "Includes gluten free only.",
-                  initialState: glutenFree,
-                  onChanged: (newState) => setState(() {
-                        glutenFree = newState;
-                      })),
-              FilterItems(
-                  title: "Lactose-free",
-                  subTitle: "Includes lactose free only.",
-                  initialState: lactoseFree,
-                  onChanged: (newState) => setState(() {
-                        lactoseFree = newState;
-                      })),
-              FilterItems(
-                  title: "Vegeterian",
-                  subTitle: "Includes vegeterian only.",
-                  initialState: vegetarian,
-                  onChanged: (newState) => setState(() {
-                        vegetarian = newState;
-                      })),
-              FilterItems(
-                  title: "Vegan",
-                  subTitle: "Includes vegan only.",
-                  initialState: vegan,
-                  onChanged: (newState) => setState(() {
-                        vegan = newState;
-                      })),
-            ],
-          )),
+      body: Column(
+        children: [
+          FilterItems(
+              title: "Gluten-free",
+              subTitle: "Includes gluten free only.",
+              initialState: filterStatus[Filter.glutenFree]!,
+              onChanged: (isChecked) {
+                ref
+                    .read(filtersProvider.notifier)
+                    .setFilter(Filter.glutenFree, isChecked);
+              }),
+          FilterItems(
+              title: "Lactose-free",
+              subTitle: "Includes lactose free only.",
+              initialState: filterStatus[Filter.lactoseFree]!,
+              onChanged: (isChecked) {
+                ref
+                    .read(filtersProvider.notifier)
+                    .setFilter(Filter.lactoseFree, isChecked);
+              }),
+          FilterItems(
+              title: "Vegeterian",
+              subTitle: "Includes vegeterian only.",
+              initialState: filterStatus[Filter.vegetarian]!,
+              onChanged: (isChecked) {
+                ref
+                    .read(filtersProvider.notifier)
+                    .setFilter(Filter.vegetarian, isChecked);
+              }),
+          FilterItems(
+              title: "Vegan",
+              subTitle: "Includes vegan only.",
+              initialState: filterStatus[Filter.vegan]!,
+              onChanged: (isChecked) {
+                ref
+                    .read(filtersProvider.notifier)
+                    .setFilter(Filter.vegan, isChecked);
+              }),
+        ],
+      ),
     );
   }
 }

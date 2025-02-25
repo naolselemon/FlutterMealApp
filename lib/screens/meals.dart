@@ -5,21 +5,17 @@ import 'package:meal_app/screens/meal_detial.dart';
 import 'package:meal_app/widgets/meal_item.dart';
 
 class Meals extends StatelessWidget {
-  const Meals(
-      {super.key, this.title, required this.meals, required this.onSelectMeal});
+  const Meals({super.key, this.title, required this.meals});
 
   final String? title;
   final List<Meal> meals;
 
-  final void Function(Meal meal) onSelectMeal;
-
   void _selectedMeal(BuildContext context, Meal meal) {
-    // TODO: Implement navigation to MealDetails page
+    // Implement navigation to MealDetails page
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (ctx) => MealDetial(
-          onSelectMeal: onSelectMeal,
           meal: meal,
         ),
       ),

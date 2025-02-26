@@ -9,11 +9,14 @@ class MealItemDetail extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Image.network(
-          meal.imageUrl,
-          height: 300,
-          width: double.infinity,
-          fit: BoxFit.cover,
+        Hero(
+          tag: meal.id,
+          child: Image.network(
+            meal.imageUrl,
+            height: 300,
+            width: double.infinity,
+            fit: BoxFit.cover,
+          ),
         ),
         const SizedBox(
           height: 20,

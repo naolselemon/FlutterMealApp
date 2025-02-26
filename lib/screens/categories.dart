@@ -31,6 +31,11 @@ class _CategoriesScreenState extends State<CategoriesScreen>
     _animationController.forward(); // initiating animation
   }
 
+  late final Animation<Offset> _animation =
+      Tween<Offset>(begin: const Offset(0, 0.3), end: const Offset(0, 0))
+          .animate(CurvedAnimation(
+              parent: _animationController, curve: Curves.easeInOut));
+
   @override
   void dispose() {
     _animationController.dispose();
@@ -58,8 +63,8 @@ class _CategoriesScreenState extends State<CategoriesScreen>
     return AnimatedBuilder(
       animation: _animationController,
       builder: (context, child) {
-        return Padding(
-          padding: EdgeInsets.only(top: 100 - _animationController.value * 100),
+        return SlideTransition(
+          position: _animation,
           child: child,
         );
       },
